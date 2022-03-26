@@ -6,6 +6,7 @@
 #include <cppcoro/config.hpp>
 #include <cppcoro/net/ipv6_endpoint.hpp>
 
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest/doctest.h"
 
 TEST_SUITE_BEGIN("ipv6_endpoint");

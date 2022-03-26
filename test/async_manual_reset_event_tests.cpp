@@ -9,6 +9,7 @@
 #include <cppcoro/sync_wait.hpp>
 #include <cppcoro/when_all_ready.hpp>
 
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest/doctest.h"
 
 TEST_SUITE_BEGIN("async_manual_reset_event");

@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <thread>
 
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest/doctest.h"
 
 DOCTEST_TEST_SUITE_BEGIN("sequence_barrier");

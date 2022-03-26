@@ -17,6 +17,7 @@
 #include <cassert>
 #include <vector>
 
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest/doctest.h"
 
 TEST_SUITE_BEGIN("single_consumer_async_auto_reset_event");

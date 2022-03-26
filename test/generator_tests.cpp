@@ -12,6 +12,7 @@
 #include <string>
 #include <forward_list>
 
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest/doctest.h"
 
 TEST_SUITE_BEGIN("generator");

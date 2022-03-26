@@ -18,7 +18,8 @@
 #include <vector>
 
 #include <ostream>
-#include "doctest/doctest.h"
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include <doctest/doctest.h>
 
 TEST_SUITE_BEGIN("async_auto_reset_event");
 

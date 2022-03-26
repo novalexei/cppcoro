@@ -18,6 +18,7 @@
 #include <vector>
 
 #include <ostream>
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest/doctest.h"
 
 TEST_SUITE_BEGIN("io_service");
