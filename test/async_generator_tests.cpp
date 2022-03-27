@@ -61,7 +61,8 @@ TEST_CASE("enumerate sequence of 1 value")
 		CHECK(startedExecution);
 		CHECK(it != gen.end());
 		CHECK(*it == 1u);
-		CHECK(co_await ++it == gen.end());
+		co_await ++it;
+		CHECK(it == gen.end());
 	}());
 }
 
@@ -89,13 +90,13 @@ TEST_CASE("enumerate sequence of multiple values")
 		CHECK(it != gen.end());
 		CHECK(*it == 1u);
 
-		CHECK(co_await ++it != gen.end());
+		co_await ++it; CHECK(it != gen.end());
 		CHECK(*it == 2u);
 
-		CHECK(co_await ++it != gen.end());
+		co_await ++it; CHECK(it != gen.end());
 		CHECK(*it == 3u);
 
-		CHECK(co_await ++it == gen.end());
+		co_await ++it; CHECK(it == gen.end());
 	}());
 }
 
@@ -232,7 +233,12 @@ TEST_CASE("exception thrown before first yield is rethrown from begin operation"
 
 	cppcoro::sync_wait([&]() -> cppcoro::task<>
 	{
-		CHECK_THROWS_AS(co_await gen.begin(), const TestException&);
+		try {
+			co_await gen.begin();
+			FAIL("gen.begin should throw");
+		}
+		catch(const TestException& expected) {}
+//		CHECK_THROWS_AS(co_await gen.begin(), const TestException&);
 	}());
 }
 
@@ -252,7 +258,12 @@ TEST_CASE("exception thrown after first yield is rethrown from increment operato
 	{
 		auto it = co_await gen.begin();
 		CHECK(*it == 1u);
-		CHECK_THROWS_AS(co_await ++it, const TestException&);
+		try {
+			co_await ++it;
+			FAIL("++it should fail");
+		}
+		catch(const TestException& expected) {}
+//		CHECK_THROWS_AS(co_await ++it, const TestException&);
 		CHECK(it == gen.end());
 	}());
 }
@@ -320,11 +331,11 @@ TEST_CASE("fmap")
 	{
 		auto it = co_await squares.begin();
 		CHECK(*it == 0);
-		CHECK(*co_await ++it == 1);
-		CHECK(*co_await ++it == 4);
-		CHECK(*co_await ++it == 9);
-		CHECK(*co_await ++it == 16);
-		CHECK(co_await ++it == squares.end());
+		co_await ++it; CHECK(*it == 1);
+		co_await ++it; CHECK(*it == 4);
+		co_await ++it; CHECK(*it == 9);
+		co_await ++it; CHECK(*it == 16);
+		co_await ++it; CHECK(it == squares.end());
 	}());
 }
 

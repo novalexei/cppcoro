@@ -49,7 +49,9 @@ if(CPPCORO_BUILD_TESTS)
     add_subdirectory(test)
 endif()
 
-add_compile_options(-fcoroutines)
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    add_compile_options(-fcoroutines)
+endif()
 
 add_library(${PROJECT_NAME} SHARED ${CPPCORO_INC_DETAIL} ${CPPCORO_INC_NET} ${CPPCORO_INC} ${CPPCORO_SRC})
 target_link_libraries(${PROJECT_NAME} pthread)

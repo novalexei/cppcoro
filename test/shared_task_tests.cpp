@@ -24,7 +24,11 @@ TEST_CASE("awaiting default-constructed task throws broken_promise")
 {
 	cppcoro::sync_wait([]() -> cppcoro::task<>
 	{
-		CHECK_THROWS_AS(co_await cppcoro::shared_task<>{}, const cppcoro::broken_promise&);
+		try {
+			co_await cppcoro::shared_task<>{};
+			FAIL("Should fail");
+		} catch(const cppcoro::broken_promise& expected) {}
+//		CHECK_THROWS_AS(t, const cppcoro::broken_promise&);
 	}());
 }
 
@@ -209,7 +213,8 @@ TEST_CASE("shared_task<void> fmap operator")
 			setNumber()
 			| cppcoro::fmap([&]() { return std::to_string(value); });
 
-		CHECK(co_await numericStringTask == "123");
+		auto nsr = co_await numericStringTask;
+		CHECK(nsr == "123");
 	}(),
 		[&]() -> cppcoro::task<>
 	{
@@ -237,7 +242,8 @@ TEST_CASE("shared_task<T> fmap operator")
 			getNumber()
 			| cppcoro::fmap([](int x) { return std::to_string(x); });
 
-		CHECK(co_await numericStringTask == "123");
+		auto nsr = co_await numericStringTask;
+		CHECK(nsr == "123");
 	}(),
 		[&]() -> cppcoro::task<>
 	{

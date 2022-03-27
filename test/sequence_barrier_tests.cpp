@@ -50,13 +50,13 @@ DOCTEST_TEST_CASE("wait_until_published single-threaded")
 	sync_wait(when_all(
 		[&]() -> task<>
 		{
-			CHECK(co_await barrier.wait_until_published(0, scheduler) == 0);
+			auto p1 = co_await barrier.wait_until_published(0, scheduler); CHECK(p1 == 0);
 			reachedA = true;
-			CHECK(co_await barrier.wait_until_published(1, scheduler) == 1);
+			auto p2 = co_await barrier.wait_until_published(1, scheduler); CHECK(p2 == 1);
 			reachedB = true;
-			CHECK(co_await barrier.wait_until_published(3, scheduler) == 3);
+			auto p3 = co_await barrier.wait_until_published(3, scheduler); CHECK(p3 == 3);
 			reachedC = true;
-			CHECK(co_await barrier.wait_until_published(4, scheduler) == 10);
+			auto p4 = co_await barrier.wait_until_published(4, scheduler); CHECK(p4 == 10);
 			reachedD = true;
 			co_await barrier.wait_until_published(5, scheduler);
 			reachedE = true;
@@ -99,18 +99,18 @@ DOCTEST_TEST_CASE("wait_until_published multiple awaiters")
 	sync_wait(when_all(
 		[&]() -> task<>
 	{
-		CHECK(co_await barrier.wait_until_published(0, scheduler) == 0);
+		auto p1 = co_await barrier.wait_until_published(0, scheduler); CHECK(p1 == 0);
 		reachedA = true;
-		CHECK(co_await barrier.wait_until_published(1, scheduler) == 1);
+		auto p2 = co_await barrier.wait_until_published(1, scheduler); CHECK(p2 == 1);
 		reachedB = true;
-		CHECK(co_await barrier.wait_until_published(3, scheduler) == 3);
+		auto p3 = co_await barrier.wait_until_published(3, scheduler); CHECK(p3 == 3);
 		reachedC = true;
 	}(),
 		[&]() -> task<>
 	{
-		CHECK(co_await barrier.wait_until_published(0, scheduler) == 0);
+		auto p1 = co_await barrier.wait_until_published(0, scheduler); CHECK(p1 == 0);
 		reachedD = true;
-		CHECK(co_await barrier.wait_until_published(3, scheduler) == 3);
+		auto p2 = co_await barrier.wait_until_published(3, scheduler); CHECK(p2 == 3);
 		reachedE = true;
 	}(),
 		[&]() -> task<>

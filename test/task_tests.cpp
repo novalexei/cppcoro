@@ -45,7 +45,9 @@ TEST_CASE("awaiting default-constructed task throws broken_promise")
 	cppcoro::sync_wait([&]() -> cppcoro::task<>
 	{
 		cppcoro::task<> t;
-		CHECK_THROWS_AS(co_await t, const cppcoro::broken_promise&);
+		try { co_await t; FAIL("co_await task should fail"); }
+		catch (const cppcoro::broken_promise& expected) {}
+//		CHECK_THROWS_AS(co_await t, const cppcoro::broken_promise&);
 	}());
 }
 
@@ -208,7 +210,8 @@ TEST_CASE("task<void> fmap pipe operator")
 	cppcoro::sync_wait(cppcoro::when_all_ready(
 		[&]() -> cppcoro::task<>
 		{
-			CHECK(co_await t == 123);
+			auto tr = co_await t;
+			CHECK(tr == 123);
 		}(),
 		[&]() -> cppcoro::task<>
 		{

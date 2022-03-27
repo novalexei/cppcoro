@@ -165,7 +165,11 @@ TEST_CASE("Timer cancellation"
 		co_await cppcoro::when_all_ready(
 			[&](cppcoro::cancellation_token ct) -> cppcoro::task<>
 		{
-			CHECK_THROWS_AS(co_await longWait(std::move(ct)), const cppcoro::operation_cancelled&);
+			try {
+				co_await longWait(std::move(ct));
+				FAIL("longWait should fail");
+			}
+			catch (const cppcoro::operation_cancelled& expected) {}
 		}(source.token()),
 			cancelAfter(source, 1ms));
 	};
